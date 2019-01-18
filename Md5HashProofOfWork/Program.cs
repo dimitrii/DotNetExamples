@@ -14,14 +14,24 @@ namespace Md5HashProofOfWork
             Console.Write("Create a seed: ");
             string source = Console.ReadLine();
 
-            Console.Write($"How many zeros ({MIN} - {MAX}): ");
-            string numberOfZerosString = Console.ReadLine();
+            int numberOfZeros = MIN;
 
-            int numberOfZeros = Convert.ToInt32(numberOfZerosString);
-
-            if (numberOfZeros < MIN || numberOfZeros > MAX)
+            while(true)
             {
-                return;   
+                Console.Write($"How many zeros ({MIN} - {MAX}): ");
+                string numberOfZerosString = Console.ReadLine();
+                try
+                {
+                    numberOfZeros = Convert.ToInt32(numberOfZerosString);
+                    if (numberOfZeros >= MIN && numberOfZeros <= MAX)
+                    {
+                        break;   
+                    }
+                }
+                catch 
+                {
+
+                }
             }
             
             int seed = 0;
