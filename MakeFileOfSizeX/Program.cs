@@ -12,7 +12,7 @@ namespace MakeFileOfSizeX
 
             int sizeInMb = Convert.ToInt32(sizeInMbString);
 
-            if (sizeInMb >= 1000 || sizeInMb < 0)
+            if (sizeInMb > 1000 || sizeInMb < 0)
             {
                 return;
             }
