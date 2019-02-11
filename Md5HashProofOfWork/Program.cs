@@ -7,64 +7,77 @@ namespace Md5HashProofOfWork
     class Program
     {
         private const int MIN = 1;
-        private const int MAX = 4;
+        private const int MAX = 10;
 
         static void Main(string[] args)
         {
-            Console.Write("Create a seed: ");
-            string source = Console.ReadLine();
-
-            int numberOfZeros = MIN;
-
             while(true)
             {
-                Console.Write($"How many zeros ({MIN} - {MAX}): ");
-                string numberOfZerosString = Console.ReadLine();
-                try
-                {
-                    numberOfZeros = Convert.ToInt32(numberOfZerosString);
-                    if (numberOfZeros >= MIN && numberOfZeros <= MAX)
-                    {
-                        break;   
-                    }
-                }
-                catch 
-                {
-
-                }
-            }
-            
-            int seed = 0;
-            int trys = 0;
-            using (MD5 md5Hash = MD5.Create())
-            {
+                string source = String.Empty;
                 while (true)
                 {
-                    trys++;
-                
-                    string hash = GetMd5Hash(md5Hash, source + seed++);
-                    Console.WriteLine(hash);
-
-                    int isZeroCheck = 0;
-                    for(int i = 0; i < numberOfZeros; i++)
-                    {
-                        if(hash[hash.Length - 1 - i] == '0')
-                        {
-                            isZeroCheck++;
-                        }
-                    }
-                    if (numberOfZeros == isZeroCheck)
+                    Console.Write("Create a seed (or exit): ");
+                    source = Console.ReadLine();
+                    if (!String.IsNullOrEmpty(source))
                     {
                         break;
                     }
                 }
+                if (source == "exit")
+                {
+                    return;
+                }
+                int numberOfZeros = MIN;
+                while(true)
+                {
+                    Console.Write($"How many zeros ({MIN} - {MAX}, or exit): ");
+                    string numberOfZerosString = Console.ReadLine();
+                    try
+                    {
+                        if (numberOfZerosString == "exit")
+                        {
+                            return;
+                        }
+                        numberOfZeros = Convert.ToInt32(numberOfZerosString);
+                        if (numberOfZeros >= MIN && numberOfZeros <= MAX)
+                        {
+                            break;   
+                        }
+                    }
+                    catch 
+                    {
+
+                    }
+                }
+                int seed = 0;
+                int trys = 0;
+                using (MD5 md5Hash = MD5.Create())
+                {
+                    while (true)
+                    {
+                        trys++;
+                        string hash = GetMd5Hash(md5Hash, source + seed++);
+                        int isZeroCheck = 0;
+                        for(int i = 0; i < numberOfZeros; i++)
+                        {
+                            if(hash[hash.Length - 1 - i] == '0')
+                            {
+                                isZeroCheck++;
+                            }
+                        }
+                        if (numberOfZeros == isZeroCheck)
+                        {
+                            Console.WriteLine(hash);
+                            Console.WriteLine($"Trys: {trys}");
+                            break;
+                        }
+                    }
+                }
             }
-            Console.WriteLine($"Trys: {trys}");
         }
 
         static string GetMd5Hash(MD5 md5Hash, string input)
         {
-
             // Convert the input string to a byte array and compute the hash.
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
@@ -78,7 +91,7 @@ namespace Md5HashProofOfWork
             {
                 sBuilder.Append(data[i].ToString("x2"));
             }
-
+            
             // Return the hexadecimal string.
             return sBuilder.ToString();
         }
