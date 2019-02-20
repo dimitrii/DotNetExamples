@@ -6,7 +6,7 @@ namespace Md5HashProofOfWork
 {
     class Program
     {
-        private const int MIN = 1;
+        private const int MIN = 0;
         private const int MAX = 10;
 
         static void Main(string[] args)
@@ -16,7 +16,7 @@ namespace Md5HashProofOfWork
                 string source = String.Empty;
                 while (true)
                 {
-                    Console.Write("Create a seed (or exit): ");
+                    Console.Write("Enter a string to hash (or type exit): ");
                     source = Console.ReadLine();
                     if (!String.IsNullOrEmpty(source))
                     {
@@ -56,7 +56,12 @@ namespace Md5HashProofOfWork
                     while (true)
                     {
                         trys++;
-                        string hash = GetMd5Hash(md5Hash, source + seed++);
+                        string toHash = source;
+                        if (seed > 0)
+                        {
+                            toHash += seed;
+                        }
+                        string hash = GetMd5Hash(md5Hash, toHash);
                         int isZeroCheck = 0;
                         for(int i = 0; i < numberOfZeros; i++)
                         {
@@ -67,10 +72,13 @@ namespace Md5HashProofOfWork
                         }
                         if (numberOfZeros == isZeroCheck)
                         {
+                            Console.WriteLine($"Seed: {seed}");
+                            Console.WriteLine($"String: {toHash}");
                             Console.WriteLine(hash);
                             Console.WriteLine($"Trys: {trys}");
                             break;
                         }
+                        seed++;
                     }
                 }
             }
