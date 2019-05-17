@@ -10,5 +10,7 @@ namespace Json
         public string Prop1 {get;set;}
         [DataMember]
         public string Prop2 {get;set;}
+        [DataMember]
+        public Model ParentModel { get; set; }
     }
 }

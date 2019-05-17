@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Xml;
 
 namespace Json
 {
@@ -13,7 +15,17 @@ namespace Json
             var model = new Model()
             {
                 Prop1 = "proeprty 1",
-                Prop2 = "property 2"                
+                Prop2 = "property 2",
+                ParentModel = new Model()
+                {
+                    Prop1 = "parentProp1",
+                    Prop2 = "parentProp2",
+                    ParentModel = new Model()
+                    {
+                        Prop1 = "parentParentProp1",
+                        Prop2 = "parentParentProp2"
+                    }
+                }
             };
 
             // Turn Object to JSON string
@@ -46,6 +58,25 @@ namespace Json
             }
             Console.WriteLine($"Prop1: {modelFromJsonString.Prop1}");
             Console.WriteLine($"Prop2: {modelFromJsonString.Prop2}");
+
+            // Turn Json string to XmlDocument
+            Dictionary<string,dynamic> obj;
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(modelJsonString)))
+            {
+                try
+                {
+                    var reader = JsonReaderWriterFactory.CreateJsonReader(ms, new XmlDictionaryReaderQuotas());
+                    while (reader.Read())
+                    {
+                        var value = reader.ReadContentAsString();
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+            
         }
     }
 }
