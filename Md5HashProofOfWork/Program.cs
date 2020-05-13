@@ -62,6 +62,7 @@ namespace Md5HashProofOfWork
                             toHash += seed;
                         }
                         string hash = GetMd5Hash(md5Hash, toHash);
+                        Console.Write("\r{0}", hash);
                         int isZeroCheck = 0;
                         for(int i = 0; i < numberOfZeros; i++)
                         {
@@ -72,9 +73,9 @@ namespace Md5HashProofOfWork
                         }
                         if (numberOfZeros == isZeroCheck)
                         {
+                            Console.WriteLine($"");
                             Console.WriteLine($"Seed: {seed}");
                             Console.WriteLine($"String: {toHash}");
-                            Console.WriteLine(hash);
                             Console.WriteLine($"Trys: {trys}");
                             break;
                         }
